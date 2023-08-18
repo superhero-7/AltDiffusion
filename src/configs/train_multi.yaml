@@ -1,0 +1,113 @@
+model:
+  #base_learning_rate: 1.0e-04
+  base_learning_rate: 1.0
+  target: ldm.models.diffusion.ddpm.LatentDiffusion
+  params:
+    linear_start: 0.00085
+    linear_end: 0.0120
+    num_timesteps_cond: 1
+    log_every_t: 200
+    timesteps: 1000
+    first_stage_key: "image"
+    cond_stage_key: "caption"
+    image_size: 64
+    channels: 4
+    cond_stage_trainable: False   # Note: different from the one we trained before
+    conditioning_key: crossattn
+    monitor: val/loss_simple_ema
+    scale_factor: 0.18215
+    use_ema: True
+    frozen_unet: True
+    save_ckpt_path: /share/project/yfl/codebase/git/AltTools/Altdiffusion/ckpt/test_ema/checkpoints
+    save_step: 5
+
+    scheduler_config: # 10000 warmup steps
+      target: lr_scheduler.LambdaWarmUpCosineScheduler
+      params:
+        warm_up_steps: 0
+        lr_start: 1.0e-09
+        lr_min: 1.0e-06
+        lr_max: 1.0e-04
+        max_decay_steps: 100000
+    unet_config:
+      target: ldm.modules.diffusionmodules.openaimodel.UNetModel
+      params:
+        image_size: 32 # unused
+        in_channels: 4
+        out_channels: 4
+        model_channels: 320
+        attention_resolutions: [ 4, 2, 1 ]
+        num_res_blocks: 2
+        channel_mult: [ 1, 2, 4, 4 ]
+        num_head_channels: 64
+        use_spatial_transformer: True
+        use_linear_in_transformer: True
+        transformer_depth: 1
+        context_dim: 1024
+        use_checkpoint: False
+        legacy: False
+        use_hypernetwork: False
+
+    first_stage_config:
+      target: ldm.models.autoencoder.AutoencoderKL
+      params:
+        embed_dim: 4
+        monitor: val/rec_loss
+        ddconfig:
+          double_z: true
+          z_channels: 4
+          resolution: 256
+          in_channels: 3
+          out_ch: 3
+          ch: 128
+          ch_mult:
+          - 1
+          - 2
+          - 4
+          - 4
+          num_res_blocks: 2
+          attn_resolutions: []
+          dropout: 0.0
+        lossconfig:
+          target: torch.nn.Identity
+
+    cond_stage_config:
+      target: lm.dcn_clip.DCNCLIP30M1024
+      params:
+        ckpt_path: "/share/project/chenzhongzhi/multi-clip/multi-clip/ckpt/kd_m18_1and2_fromscratch/checkpoint-258420"
+
+data:
+  target: Dataclass.WebDatasetFromConfig
+  params:
+    train_data: "/share/projset/laion5B-data/laion_aesthetics_5plus_features_20994/{000000..020993}.tar"
+    train_num_samples: 600000000
+    seed: 34070
+    batch_size: 4
+    workers: 4
+    world_size: 64
+    dataset_resample: True
+    start_epoch: 0
+    use_ourdecoder: False
+    use_256: False
+    cfg: 0.1
+
+# data:
+#   target: Dataclass.DataModuleFromConfig
+#   params:
+#     batch_size: 12
+#     num_workers: 4
+
+lightning:
+  trainer:
+    benchmark: False 
+  
+train:
+  pretrain_ckpt_dir: "/share/project/yfl/codebase/git/AltTools/Altdiffusion/ckpt/xformer_laion5plus_512_kv_cfg/checkpoints/step=000001805.ckpt"
+  logdir: "../ckpt/test_ema"
+  max_epochs: 10
+  accumulate_grad_batches: 3
+  ddp: 
+    accelerator: 'gpu'
+    devices: 1
+    strategy: "ddp"
+    num_nodes: 1

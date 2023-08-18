@@ -1,0 +1,112 @@
+model:
+  #base_learning_rate: 1.0e-04
+  base_learning_rate: 1.0
+  target: ldm.models.diffusion.ddpm.LatentDiffusion
+  params:
+    linear_start: 0.00085
+    linear_end: 0.0120
+    num_timesteps_cond: 1
+    log_every_t: 200
+    timesteps: 1000
+    first_stage_key: "image"
+    cond_stage_key: "text"
+    image_size: 64
+    channels: 4
+    cond_stage_trainable: False   # Note: different from the one we trained before
+    conditioning_key: crossattn
+    monitor: val/loss_simple_ema
+    scale_factor: 0.18215
+    use_ema: False
+    frozen_unet: True
+    save_ckpt_path: /fsx/zacliu/AltTools/Altdiffusion/ckpt/laion_aethetics_kv_512_xformer_cfg/checkpoints
+    save_step: 5000
+  
+    scheduler_config: # 10000 warmup steps
+      target: lr_scheduler.LambdaWarmUpCosineScheduler
+      params:
+        warm_up_steps: 10000
+        lr_start: 1.0e-09
+        lr_min: 1.0e-06
+        lr_max: 1.0e-04
+        max_decay_steps: 100000
+    unet_config:
+      target: ldm.modules.diffusionmodules.openaimodel.UNetModel
+      params:
+        image_size: 32 # unused
+        in_channels: 4
+        out_channels: 4
+        model_channels: 320
+        attention_resolutions: [ 4, 2, 1 ]
+        num_res_blocks: 2
+        channel_mult: [ 1, 2, 4, 4 ]
+        num_head_channels: 64
+        use_spatial_transformer: True
+        use_linear_in_transformer: True
+        transformer_depth: 1
+        context_dim: 1024
+        use_checkpoint: True
+        legacy: False
+        use_hypernetwork: False
+
+    first_stage_config:
+      target: ldm.models.autoencoder.AutoencoderKL
+      params:
+        embed_dim: 4
+        monitor: val/rec_loss
+        ddconfig:
+          double_z: true
+          z_channels: 4
+          resolution: 256
+          in_channels: 3
+          out_ch: 3
+          ch: 128
+          ch_mult:
+          - 1
+          - 2
+          - 4
+          - 4
+          num_res_blocks: 2
+          attn_resolutions: []
+          dropout: 0.0
+        lossconfig:
+          target: torch.nn.Identity
+
+    cond_stage_config:
+      target: lm.dcn_clip.DCNCLIP30M1024
+      params:
+        ckpt_path: "/fsx/zacliu/mv_stability/checkpoint-258420"
+
+data:
+  target: Dataclass.WebDatasetFromConfig
+  params:
+    train_data: 'pipe:aws s3 cp s3://s-datasets/laion-aesthetic/data/laion2B-en-aesthetic/{00000..05247}.tar -::pipe:aws s3 cp s3://s-datasets/laion-aesthetic/data/laion2B-multi-aesthetic/{00000..05247}.tar -'
+    # train_data: 'pipe:aws s3 cp s3://s-datasets/laion5b/laion2B-data/{000000..231349}.tar -'
+    # train_data: 'pipe:aws s3 cp s3://s-datasets/laion5b/laion2B-multi-data/{000000..226687}.tar -'
+    train_num_samples: 100000000
+    seed: 34070
+    batch_size: 10
+    workers: 4
+    world_size: 64
+    # world_size: 16
+    dataset_resample: True
+    start_epoch: 0
+    use_ourdecoder: False
+    use_256: False
+    # use_combine意思是要不要用combine的数据，例如laion2b跟multi拼起来
+    use_combine: True
+    cfg: 0.1
+
+lightning:
+  trainer:
+    benchmark: False 
+  
+train:
+  pretrain_ckpt_dir: "/fsx/zacliu/AltTools/Altdiffusion/ckpt/laion_aethetics_all_512_xformer_ema/checkpoints/step=000045000.ckpt"
+  logdir: "/fsx/zacliu/AltTools/Altdiffusion/ckpt/laion_aethetics_all_512_xformer_ema_cfg"
+  max_epochs: 10
+  accumulate_grad_batches: 6
+  ddp: 
+    accelerator: 'gpu'
+    devices: 1
+    strategy: "ddp"
+    num_nodes: 1
