@@ -25,23 +25,23 @@ Storing ckpt for different models
 
 #### 1.2.1 callbacks
 
-        Contains various log implementations, inserted through callback functions during training;
+    Contains various log implementations, inserted through callback functions during training;
 
 #### 1.2.2 configs
 
-        Training and reasoning profiles
+    Training and reasoning profiles
 
 #### 1.2.3 ldm
 
-        The body code for stable diffusion is all here
+    The body code for stable diffusion is all here
 
 #### 1.2.4 lm
 
-        The model code for altclip is all here
+    The model code for altclip is all here
 
 #### 1.2.5 scripts
 
-        Training startup code
+    Training startup code
 
 Dataclass.py： Data loading class
 
