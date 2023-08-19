@@ -76,7 +76,7 @@ Therefore, the training operation process is as follows:
 2. Run the command to fill in:
 
 ```python
-        bash your_codepath_to_altdiffusion/src/scripts/run_multinode.sh
+bash your_codepath_to_altdiffusion/src/scripts/run_multinode.sh
 ```
 
 ## Inference
