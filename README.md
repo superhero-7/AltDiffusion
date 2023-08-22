@@ -1,7 +1,7 @@
 # AltDiffuson
 Source code for paper: ["AltDiffusion: A multilingual Text-to-Image diffusion model"](https://arxiv.org/abs/2308.09991)
 
-# Introduction
+# 🏴 Introduction
 
 we introduce a novel multilingual T2I diffusion model, which is capable of processing eighteen languages[^1] that cover 46.94\% of the world's first-language speakers and 27.64\% of the world's second-language speakers, named **AltDiffusion(AD)**, along with an efficient training approach shown in bellow.
 
@@ -13,7 +13,7 @@ Specifically, we first train a multilingual text encoder based on the knowledge 
 
 [^1]:Eighteen languages: English, Chinese, Japanese, Thai, Korean, Hindi, Ukrainian, Arabic, Turkish, Vietnamese, Polish, Dutch, Portuguese, Italian, Spanish, German, French, and Russian.
 
-## Project Structure
+## 👐 Project Structure
 
 ### 1.1 ckpt
 
@@ -53,7 +53,7 @@ lr_scheduler.py: Setting of learning rate
 Includes data preprocessing, model inference, evaluation, and more; (dirty folder)
 
 
-## Environment Configuration
+## 🔨 Environment Configuration
 
 ```python
 pip install torch 1.12.1 torchvision 0.13.1
@@ -61,7 +61,7 @@ cd src
 pip install -r requirements.txt
 ```
 
-## Training
+## 🛫 Training
 
 The training startup script is located in src/scripts/run_multinode.sh. This script is not subject to change. The code path and saved log.txt path should be changed when first used.
 
@@ -79,11 +79,11 @@ Therefore, the training operation process is as follows:
 bash your_codepath_to_altdiffusion/src/scripts/run_multinode.sh
 ```
 
-## Inference
+## 🚀 Inference
 
 Inference scripts are located at misc/nb/inference.ipynb, and simply replace the opt.ckpt in them to test different models
 
-## Evaluation
+## 📐 Evaluation
 
 /misc/evaluation is the source code for MS-COCO evaluation, including translate script, generation script, and metrics calculation script.
 
@@ -91,3 +91,16 @@ Inference scripts are located at misc/nb/inference.ipynb, and simply replace the
 
 /misc/human_evaluaiton is the source code for MC-18 evaluation(mentioned in the paper), including translate script,
 evaluation interface.
+
+## ✒ Citation
+Please cite our paper if you find it helpful :)
+```
+@misc{ye2023altdiffusion,
+      title={AltDiffusion: A Multilingual Text-to-Image Diffusion Model}, 
+      author={Fulong Ye and Guang Liu and Xinya Wu and Ledell Wu},
+      year={2023},
+      eprint={2308.09991},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
