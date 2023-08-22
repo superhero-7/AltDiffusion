@@ -1,5 +1,5 @@
 # AltDiffuson
-Source code for paper: "AltDiffusion: A multilingual Text-to-Image diffusion model"
+Source code for paper: ["AltDiffusion: A multilingual Text-to-Image diffusion model"](https://arxiv.org/abs/2308.09991)
 
 # Introduction
 
