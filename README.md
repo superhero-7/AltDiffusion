@@ -1,7 +1,7 @@
 # AltDiffuson
 Source code for paper: ["AltDiffusion: A multilingual Text-to-Image diffusion model"](https://arxiv.org/abs/2308.09991)
 
-# 🏴 Introduction
+## 🏴 Introduction
 
 we introduce a novel multilingual T2I diffusion model, which is capable of processing eighteen languages[^1] that cover 46.94\% of the world's first-language speakers and 27.64\% of the world's second-language speakers, named **AltDiffusion(AD)**, along with an efficient training approach shown in bellow.
 
