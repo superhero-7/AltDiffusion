@@ -1,6 +1,10 @@
 # AltDiffuson
 Source code for paper: ["AltDiffusion: A multilingual Text-to-Image diffusion model"](https://arxiv.org/abs/2308.09991)
 
+Our project is also spported in [FlagAI](https://github.com/FlagAI-Open/FlagAI), [Diffusers](https://github.com/huggingface/diffusers/tree/main/src/diffusers/pipelines/alt_diffusion) and [WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui).
+
+We release the checkpoints of AltDiffusion [m2](https://huggingface.co/BAAI/AltDiffusion), [m9](https://huggingface.co/BAAI/AltDiffusion-m9) and [m18](https://huggingface.co/BAAI/AltDiffusion-m18).
+
 ## 🏴 Introduction
 
 we introduce a novel multilingual T2I diffusion model, which is capable of processing eighteen languages[^1] that cover 46.94\% of the world's first-language speakers and 27.64\% of the world's second-language speakers, named **AltDiffusion(AD)**, along with an efficient training approach shown in bellow.
