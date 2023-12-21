@@ -5,7 +5,7 @@ Our project is also spported in [FlagAI](https://github.com/FlagAI-Open/FlagAI),
 
 We release the checkpoints of AltDiffusion [m2](https://huggingface.co/BAAI/AltDiffusion), [m9](https://huggingface.co/BAAI/AltDiffusion-m9) and [m18](https://huggingface.co/BAAI/AltDiffusion-m18).
 
-news: Our paper is accepted by AAAI 2024.
+News: Our paper is accepted by AAAI 2024.
 
 ## 🏴 Introduction
 
