@@ -17,6 +17,9 @@ Specifically, we first train a multilingual text encoder based on the knowledge 
 
 ![Method of AltDiffusion](./img_cash/18-2-2.png)
 
+Cause the AAAI could not put the table in the image manner, we put the MC-18 example here for the reader who insteresting in the data format.
+![Example of MC-18](./img_cash/table.png)
+
 [^1]:Eighteen languages: English, Chinese, Japanese, Thai, Korean, Hindi, Ukrainian, Arabic, Turkish, Vietnamese, Polish, Dutch, Portuguese, Italian, Spanish, German, French, and Russian.
 
 ## 👐 Project Structure
